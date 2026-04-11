@@ -37,7 +37,7 @@ async def start_handler(message: types.Message):
         f"Assalomu alaykum, {message.from_user.full_name}! 👋\n\n"
         "**AI DAROMAD** kitobini sotib olish botiga xush kelibsiz.\n\n"
         "Ushbu kitob orqali siz sun'iy intellekt yordamida moliyaviy erkinlikka erishish yo'llarini o'rganasiz.\n\n"
-        "💰 Kitob narxi: **63,000 UZS**\n\n"
+        "💰 Kitob narxi: **66,000 UZS**\n\n"
         "Sotib olish uchun quyidagi tugmani bosing:",
         reply_markup=types.InlineKeyboardMarkup(
             inline_keyboard=[
