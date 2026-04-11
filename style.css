@@ -211,6 +211,7 @@ nav a:hover {
     border-radius: 10px;
     transition: 0.5s;
     filter: drop-shadow(0 0 20px var(--primary-glow));
+    mix-blend-mode: screen; /* Qora fonni yashirish uchun */
 }
 
 .book-mockup:hover {
