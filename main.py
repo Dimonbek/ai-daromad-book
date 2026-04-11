@@ -3,8 +3,8 @@ import asyncio
 import os
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
-from aiogram.types import LabeledPrice, PreCheckoutQuery, ContentType
-from fastapi import FastAPI
+from aiogram.types import LabeledPrice, PreCheckoutQuery, ContentType, Update
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import uvicorn
@@ -12,12 +12,15 @@ import uvicorn
 # ==========================================
 # KONFIGURATSIYA
 # ==========================================
-# Render-da Environment Variables qilib sozlash tavsiya etiladi
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8637987450:AAEwdY0xi7BvzNUcoY4RRhwtOvUBIYstcRI")
 CLICK_TOKEN = os.getenv("CLICK_TOKEN", "398062629:TEST:999999999_F91D8F69C042267444B74CC0B3C747757EB0E065")
-BOOK_PRICE = 63000 * 100  # 63,000 UZS
-# Render-da fayl yo'li Linux bo'lishi kerak
+BOOK_PRICE = 63000 * 100 
 BOOK_PDF_PATH = os.getenv("BOOK_PDF_PATH", "kitob.pdf") 
+
+# Webhook sozlamalari
+RENDER_URL = "https://ai-daromad-book.onrender.com"
+WEBHOOK_PATH = f"/webhook/{BOT_TOKEN}"
+WEBHOOK_URL = RENDER_URL + WEBHOOK_PATH
 
 # Loglarni sozlash
 logging.basicConfig(level=logging.INFO)
@@ -85,28 +88,31 @@ async def success_payment_handler(message: types.Message):
 
 app = FastAPI()
 
-# Statik fayllarni xizmat qilish (index.html, style.css, rasmlar)
-app.mount("/static", StaticFiles(directory="."), name="static")
-
 @app.get("/")
 async def serve_home():
     return FileResponse("index.html")
 
-# Agar CSS yoki rasmlar chaqirilsa, ularni rootdan topish uchun
+@app.post(WEBHOOK_PATH)
+async def bot_webhook(request: Request):
+    update = Update.model_validate(await request.json(), context={"bot": bot})
+    await dp.feed_update(bot, update)
+
 @app.get("/{file_path:path}")
 async def get_file(file_path: str):
     if os.path.exists(file_path):
         return FileResponse(file_path)
     return {"error": "File not found"}
 
-# Botni backgroundda ishga tushirish
 @app.on_event("startup")
 async def on_startup():
-    # Avvalgi polling yoki webhooklarni tozalash (Conflict oldini olish uchun)
-    await bot.delete_webhook(drop_pending_updates=True)
-    asyncio.create_task(dp.start_polling(bot))
+    logging.info(f"Setting webhook to: {WEBHOOK_URL}")
+    await bot.set_webhook(url=WEBHOOK_URL, drop_pending_updates=True)
+
+@app.on_event("shutdown")
+async def on_shutdown():
+    await bot.delete_webhook()
+    await bot.session.close()
 
 if __name__ == "__main__":
-    # Render PORT muhitini o'zi beradi
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
