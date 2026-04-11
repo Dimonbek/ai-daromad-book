@@ -14,7 +14,7 @@ import uvicorn
 # ==========================================
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8637987450:AAEwdY0xi7BvzNUcoY4RRhwtOvUBIYstcRI")
 CLICK_TOKEN = os.getenv("CLICK_TOKEN", "398062629:TEST:999999999_F91D8F69C042267444B74CC0B3C747757EB0E065")
-BOOK_PRICE = 63000 * 100 
+BOOK_PRICE = 66000 * 100 
 BOOK_PDF_PATH = os.getenv("BOOK_PDF_PATH", "kitob.pdf") 
 
 # Webhook sozlamalari
