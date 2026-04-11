@@ -99,7 +99,11 @@ async def bot_webhook(request: Request):
 
 @app.get("/{file_path:path}")
 async def get_file(file_path: str):
-    if os.path.exists(file_path):
+    # Agar fayl bo'sh bo'lsa yoki index bo'lsa serve_home ishlaydi
+    if not file_path or file_path == "index.html":
+        return FileResponse("index.html")
+    
+    if os.path.exists(file_path) and os.path.isfile(file_path):
         return FileResponse(file_path)
     return {"error": "File not found"}
 
