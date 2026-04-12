@@ -18,7 +18,7 @@ BOOK_PRICE = 66000 * 100
 BOOK_PDF_PATH = os.getenv("BOOK_PDF_PATH", "kitob.pdf") 
 
 # Webhook sozlamalari
-RENDER_URL = "https://ai-daromad-book.onrender.com"
+RENDER_URL = os.getenv("RENDER_EXTERNAL_URL", "https://onlaynkitob.uz")
 WEBHOOK_PATH = f"/webhook/{BOT_TOKEN}"
 WEBHOOK_URL = RENDER_URL + WEBHOOK_PATH
 
@@ -109,14 +109,22 @@ async def get_file(file_path: str):
 
 @app.on_event("startup")
 async def on_startup():
-    logging.info(f"Setting webhook to: {WEBHOOK_URL}")
-    await bot.set_webhook(url=WEBHOOK_URL, drop_pending_updates=True)
+    # Faqat Render-da Webhook o'rnatamiz
+    if os.getenv("PORT"):
+        logging.info(f"PRODUCTION: Setting webhook to: {WEBHOOK_URL}")
+        await bot.set_webhook(url=WEBHOOK_URL, drop_pending_updates=True)
+    else:
+        logging.info("LOCAL: Running in Polling mode...")
+        # Lokal rejimda webhook o'chirib yuboriladi
+        await bot.delete_webhook(drop_pending_updates=True)
+        # Pollingni alohida vazifa sifatida boshlash
+        asyncio.create_task(dp.start_polling(bot))
 
 @app.on_event("shutdown")
 async def on_shutdown():
-    await bot.delete_webhook()
     await bot.session.close()
 
 if __name__ == "__main__":
+    # Render PORT ni o'zi beradi, lokalda esa 8000 ishlaydi
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
