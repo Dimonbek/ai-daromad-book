@@ -18,7 +18,7 @@ BOOK_PRICE = 66000 * 100
 BOOK_PDF_PATH = os.getenv("BOOK_PDF_PATH", "kitob.pdf") 
 
 # Webhook sozlamalari
-RENDER_URL = os.getenv("RENDER_EXTERNAL_URL", "https://onlaynkitob.uz")
+RENDER_URL = os.getenv("RENDER_EXTERNAL_URL", "https://onlayn-kitob.uz")
 WEBHOOK_PATH = f"/webhook/{BOT_TOKEN}"
 WEBHOOK_URL = RENDER_URL + WEBHOOK_PATH
 
