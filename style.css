@@ -384,17 +384,47 @@ footer {
 }
 
 @media (max-width: 1024px) {
+    nav { padding: 1.5rem 5%; }
     .hero {
         flex-direction: column;
         text-align: center;
-        padding-top: 150px;
+        padding: 120px 5% 60px;
+        gap: 2rem;
     }
     .hero h1 { font-size: 3.5rem; }
     .hero-content { display: flex; flex-direction: column; align-items: center; }
+    .hero-image { order: -1; }
+    .book-mockup { max-width: 350px; }
 }
 
-@media (max-width: 600px) {
-    .hero h1 { font-size: 2.5rem; }
-    .cta-group { flex-direction: column; width: 100%; }
+@media (max-width: 768px) {
+    .section-header h2 { font-size: 2.5rem; }
+    .glass-panel { padding: 2rem; }
+    .chapters-grid { grid-template-columns: 1fr; }
+    .cta-card { padding: 3rem 1.5rem; }
+    .new-price { font-size: 3rem; }
+    .old-price { font-size: 1.8rem; }
+}
+
+@media (max-width: 480px) {
+    nav { padding: 1rem 5%; }
+    .brand { font-size: 1.2rem; }
+    .nav-btn { padding: 0.6rem 1rem; font-size: 0.9rem; }
     nav ul { display: none; }
+    
+    .hero h1 { font-size: 2.2rem; }
+    .hero p { font-size: 1rem; }
+    .cta-group { flex-direction: column; width: 100%; gap: 1rem; }
+    .btn-primary { width: 100%; text-align: center; padding: 1rem; }
+    
+    .section-header h2 { font-size: 2rem; }
+    .features { padding: 60px 5%; }
+    
+    .cta-card h2 { font-size: 1.8rem; }
+    .price-box { flex-direction: column; gap: 5px; margin-bottom: 2rem; }
+    .new-price { font-size: 2.8rem; }
+    .old-price { font-size: 1.5rem; }
+    .white-btn { width: 100%; display: block; padding: 1rem; font-size: 1.1rem; }
+    
+    .details-section { padding: 40px 5%; }
 }
