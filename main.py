@@ -13,8 +13,7 @@ import uvicorn
 # KONFIGURATSIYA
 # ==========================================
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8637987450:AAEwdY0xi7BvzNUcoY4RRhwtOvUBIYstcRI")
-CLICK_TOKEN = os.getenv("CLICK_TOKEN", "398062629:TEST:999999999_F91D8F69C042267444B74CC0B3C747757EB0E065")
-BOOK_PRICE = 66000 * 100 
+BOOK_PRICE = 66000 # UZS
 BOOK_PDF_PATH = os.getenv("BOOK_PDF_PATH", "kitob.pdf") 
 
 # Webhook sozlamalari
@@ -48,41 +47,25 @@ async def start_handler(message: types.Message):
     )
 
 @dp.callback_query(F.data == "buy_book")
-async def send_invoice(callback_query: types.CallbackQuery):
-    await bot.send_invoice(
-        callback_query.from_user.id,
-        title="AI DAROMAD Kitobi",
-        description="AI orqali daromad qilish bo'yicha to'liq qo'llanma (PDF)",
-        provider_token=CLICK_TOKEN,
-        currency="UZS",
-        prices=[LabeledPrice(label="Kitob", amount=BOOK_PRICE)],
-        payload="book_purchase_payload",
-        photo_url="https://raw.githubusercontent.com/Dimonbek/ai-daromad-book/main/book-cover.png",
-        photo_size=512,
-        photo_width=512,
-        photo_height=512,
-        is_flexible=False
-    )
-
-@dp.pre_checkout_query()
-async def pre_checkout_handler(pre_checkout_query: PreCheckoutQuery):
-    await bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)
-
-@dp.message(F.content_type == ContentType.SUCCESSFUL_PAYMENT)
-async def success_payment_handler(message: types.Message):
-    await message.answer(
-        "To'lov muvaffaqiyatli amalga oshirildi! 🎉✅\n\n"
-        "Tabriklaymiz! Siz moliyaviy erkinlik sari katta qadam tashladingiz.\n"
+async def process_buy_book(callback_query: types.CallbackQuery):
+    payment_text = (
+        "💳 **To'lov ma'lumotlari:**\n\n"
+        "Karta: `5614681290542020` (HUMO)\n"
+        "Egasi: **Abbosov.D**\n"
+        "Summa: **66,000 UZS**\n\n"
+        "Toʻlov qiling va chekni @Daromad_ai yuboring. Chekni tekshirib yaqin 10 daqiqada kitobni yuboraman. ✅"
     )
     
-    try:
-        if os.path.exists(BOOK_PDF_PATH):
-            await message.answer_document(types.FSInputFile(BOOK_PDF_PATH), caption="Mana sizning kitobingiz! 📚")
-        else:
-            await message.answer("Kitobingiz hozirda yakuniy tahrirda. Tayyor bo'lishi bilan aynan shu yerga yuboriladi! 🚀")
-    except Exception as e:
-        logging.error(f"Fayl yuborishda xato: {e}")
-        await message.answer("Kitobni avtomatik yuborishda kichik muammo bo'ldi. Admin tez orada siz bilan bog'lanadi.")
+    await callback_query.message.answer(
+        payment_text,
+        reply_markup=types.InlineKeyboardMarkup(
+            inline_keyboard=[
+                [types.InlineKeyboardButton(text="Admin bilan bog'lanish 👤", url="https://t.me/Daromad_ai")]
+            ]
+        ),
+        parse_mode="Markdown"
+    )
+    await callback_query.answer()
 
 # --- WEB SERVER (FastAPI) ---
 
