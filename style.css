@@ -416,49 +416,58 @@ body {
 
 /* ... existing styles ... */
 
-@media (max-width: 480px) {
+@media (max-width: 991px) {
     nav { 
-        padding: 0.8rem 5%; 
-        justify-content: space-between; /* Ensure logo and button are spread out */
+        padding: 1rem 5%; 
+        justify-content: space-between;
     }
-    .brand { font-size: 1.1rem; flex-shrink: 0; }
+    .brand { font-size: 1.2rem; }
     .nav-btn { 
-        padding: 0.5rem 0.8rem; 
-        font-size: 0.8rem; 
-        flex-shrink: 0;
-        margin-left: auto; /* Push button to the right */
+        padding: 0.6rem 1rem; 
+        font-size: 0.85rem; 
     }
-    nav ul { display: none !important; } /* Hard hide navigation links on mobile */
+    nav ul { display: none !important; } /* Hide menu items on mobile/tablets */
     
-    .hero { padding-top: 100px; }
-    .hero h1 { font-size: 1.8rem; } /* Slightly smaller for very small screens */
-    .hero p { font-size: 0.9rem; }
+    .hero { 
+        flex-direction: column;
+        padding-top: 100px; 
+        text-align: center;
+    }
+    .hero h1 { font-size: 2.2rem; }
+    .hero-content { align-items: center; }
+    .hero-image { order: -1; }
+    .book-mockup { max-width: 300px; }
     
-    .section-header h2 { font-size: 1.6rem; }
+    .section-header h2 { font-size: 2rem; }
+    .features { padding: 50px 5%; }
+    .grid { grid-template-columns: 1fr; }
     
-    /* Pricing Section Mobile Fix */
-    .final-cta { padding: 30px 5%; }
-    .cta-card { padding: 2rem 1rem; border-radius: 20px; }
-    .cta-card h2 { font-size: 1.4rem; }
+    /* Pricing Section Fix */
+    .final-cta { padding: 40px 5%; }
+    .cta-card { padding: 3rem 1.5rem; border-radius: 20px; }
+    .cta-card h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
     
     .price-box { 
-        flex-direction: row; /* Try row again with smaller fonts */
-        flex-wrap: wrap;
-        gap: 10px; 
+        flex-direction: row; 
+        flex-wrap: nowrap;
+        gap: 15px; 
         justify-content: center;
-        margin-bottom: 1.5rem;
+        align-items: baseline;
+        margin-bottom: 2rem;
     }
-    .old-price { font-size: 1.1rem; }
+    .old-price { font-size: 1.2rem; opacity: 0.5; }
     .new-price { 
-        font-size: 1.8rem; /* Smaller to fit in one line with UZS if possible */
+        font-size: 2.2rem; 
         -webkit-text-fill-color: white;
         background: none;
+        display: inline-block;
     }
     
     .white-btn { 
         width: 100%; 
         display: block; 
-        padding: 0.8rem 0; 
-        font-size: 0.95rem; 
+        padding: 1rem 0; 
+        font-size: 1.1rem; 
+        text-align: center;
     }
 }
